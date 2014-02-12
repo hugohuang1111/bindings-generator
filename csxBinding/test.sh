@@ -54,7 +54,7 @@ CONFIG_FILE="$PROJECT_ROOT/test.ini"
 # set output dir
 OUTPUT_DIR=./output
 
-OUTPUT_FILE="csx_cocs2dx_binding"
+OUTPUT_FILE="csxcocos2dxbinding"
 
 # TARGET="spidermonkey"
 # TARGET="lua"

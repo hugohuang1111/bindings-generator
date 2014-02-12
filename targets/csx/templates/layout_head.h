@@ -1,8 +1,10 @@
 ## ==== template for generated header
 
-\#ifndef __${prefix}_h__
-\#define __${prefix}_h__
+\#ifndef __csx_${prefix}_h__
+\#define __csx_${prefix}_h__
 
+\#include "cocos2d.h"
+\#include "csxbindinghelper.h"
 \#include <stack>
 \#include <map>
 \#include <stdint.h>

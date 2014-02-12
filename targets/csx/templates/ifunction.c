@@ -1,9 +1,10 @@
+
 ## ===== instance function implementation template
 void ${signature_name}(CSXContext *cx, uint32_t argc)
 {
 #if not $is_constructor
 	## ===== get the object from top of the stack
-	$class_name* obj = ($class_name*)cx->top();
+	$namespaced_class_name* obj = ($namespaced_class_name*)cx->top();
 	cx->pop();
 #end if
 
@@ -36,14 +37,14 @@ void ${signature_name}(CSXContext *cx, uint32_t argc)
 		## ===== Call function
 		#if $ret_type.name != "void"
 			#if $ret_type.is_enum
-		int ret = (int)cobj->${func_name}($arg_list);
+		int ret = (int)obj->${func_name}($arg_list);
 			#else
-		${ret_type.get_whole_name($generator)} ret = cobj->${func_name}($arg_list);
+		${ret_type.get_whole_name($generator)} ret = obj->${func_name}($arg_list);
 			#end if
 
-		cx->push(ret);
+		cx->push((void*)ret);
 		#else
-		cobj->${func_name}($arg_list);
+		obj->${func_name}($arg_list);
 		#end if
 	}
 		#set $arg_idx = $arg_idx + 1
