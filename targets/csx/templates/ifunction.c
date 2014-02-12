@@ -3,7 +3,7 @@ void ${signature_name}(CSXContext *cx, uint32_t argc)
 {
 #if not $is_constructor
 	## ===== get the object from top of the stack
-	void* obj = ($class_name*)cx->top();
+	$class_name* obj = ($class_name*)cx->top();
 	cx->pop();
 #end if
 
@@ -18,7 +18,7 @@ void ${signature_name}(CSXContext *cx, uint32_t argc)
 		#set $count = 0;
 		#while $count < $arg_idx
 			#set $arg = $arguments[$count]
-		${arg.to_string($generator)} arg${count} = ($arg*)cx-top();
+		${arg} arg${count} = ($arg)cx->top();
 		cx->pop();
 			#set $count = $count + 1
 		#end while
@@ -40,7 +40,7 @@ void ${signature_name}(CSXContext *cx, uint32_t argc)
 			#else
 		${ret_type.get_whole_name($generator)} ret = cobj->${func_name}($arg_list);
 			#end if
-		
+
 		cx->push(ret);
 		#else
 		cobj->${func_name}($arg_list);

@@ -41,7 +41,7 @@ if [ -z "${COCOS2DX_ROOT+aaa}" ]; then
 fi
 
 if [ -z "${CXX_GENERATOR_ROOT+aaa}" ]; then
-    CXX_GENERATOR_ROOT="$COCOS2DX_ROOT/tools/bindings-generator"
+    CXX_GENERATOR_ROOT="$DIR/.."
 fi
 
 if [ -z "${PROJECT_ROOT+aaa}" ]; then
@@ -53,6 +53,8 @@ CONFIG_FILE="$PROJECT_ROOT/test.ini"
 
 # set output dir
 OUTPUT_DIR=./output
+
+OUTPUT_FILE="csx_cocs2dx_binding"
 
 # TARGET="spidermonkey"
 # TARGET="lua"
@@ -132,4 +134,4 @@ echo ---
 # Generate bindings for cocos2dx
 echo "Generating bindings for cocos2dx..."
 set -x
-LD_LIBRARY_PATH=${CXX_GENERATOR_ROOT}/libclang $PYTHON_BIN ${CXX_GENERATOR_ROOT}/generator.py ${CONFIG_FILE} -s cocos2d-x -t ${TARGET} -o ${OUTPUT_DIR}  -n jsb_cocos2dx_auto
+LD_LIBRARY_PATH=${CXX_GENERATOR_ROOT}/libclang $PYTHON_BIN ${CXX_GENERATOR_ROOT}/generator.py ${CONFIG_FILE} -s cocos2d-x -t ${TARGET} -o ${OUTPUT_DIR} -n ${OUTPUT_FILE}
