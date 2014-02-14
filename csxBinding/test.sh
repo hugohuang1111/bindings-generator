@@ -8,6 +8,9 @@
 # exit this script if any commmand fails
 set -e
 
+# Point COCOS2DX_ROOT to CSX
+COCOS2DX_ROOT=/Users/niteluo/Projects/CocoStudioX/cocos2d-x
+
 # read user.cfg if it exists and is readable
 
 _CFG_FILE=$(dirname "$0")"/user.cfg"
