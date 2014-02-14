@@ -4,7 +4,7 @@ void ${signature_name}(CSXContext *cx, uint32_t argc)
 {
 #if not $is_constructor
 	## ===== get the object from top of the stack
-	$namespaced_class_name* obj = ($namespaced_class_name*)cx->top();
+	$namespaced_class_name* obj = cx->top()->getValue<$namespaced_class_name*>();
 	cx->pop();
 #end if
 
@@ -19,7 +19,7 @@ void ${signature_name}(CSXContext *cx, uint32_t argc)
 		#set $count = 0;
 		#while $count < $arg_idx
 			#set $arg = $arguments[$count]
-		${arg} arg${count} = ($arg)cx->top();
+		${arg} arg${count} = cx->top()->getValue<$arg>();
 		cx->pop();
 			#set $count = $count + 1
 		#end while
@@ -41,8 +41,13 @@ void ${signature_name}(CSXContext *cx, uint32_t argc)
 			#else
 		${ret_type.get_whole_name($generator)} ret = obj->${func_name}($arg_list);
 			#end if
-
-		cx->push((void*)ret);
+		Variant* retVar = new Variant();
+		#if $ret_type.is_enum
+		retVar->setValue<int>(ret);
+		#else
+		retVar->setValue<${ret_type.get_whole_name($generator)}>(ret);
+		#end if
+		cx->push(retVar);
 		#else
 		obj->${func_name}($arg_list);
 		#end if

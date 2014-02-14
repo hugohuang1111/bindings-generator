@@ -14,33 +14,50 @@ conversions:
     "@cocos2d::Map<std::basic_string.*,": "cocos2d::Map<std::string,"
   to_native:
     # jsval to int
-    int: "ok &= jsval_to_int32(cx, ${in_value}, (int32_t *)&${out_value})"
-    "unsigned int": "ok &= jsval_to_uint32(cx, ${in_value}, &${out_value})"
-    "unsigned char": "ok &= jsval_to_uint16(cx, ${in_value}, &${out_value})"
-    short: "ok &= jsval_to_int32(cx, ${in_value}, &${out_value})"
-    "unsigned short": "ok &= jsval_to_ushort(cx, ${in_value}, &${out_value})"
-    char: "ok &= jsval_to_int32(cx, ${in_value}, &${out_value})"
-    bool: "ok &= JS_ValueToBoolean(cx, ${in_value}, &${out_value})"
-    float: "ok &= JS_ValueToNumber(cx, ${in_value}, &${out_value})"
-    double: "ok &= JS_ValueToNumber(cx, ${in_value}, &${out_value})"
-    long: "ok &= jsval_to_long(cx, ${in_value}, &${out_value})"
-    "unsigned long": "ok &= jsval_to_ulong(cx, ${in_value}, &${out_value})"
-    "ssize_t": "ok &= jsval_to_ssize(cx, ${in_value}, &${out_value})"
-    # jsval has to be a TypedArray, a UInt32Array with 2 elements
-    "long long": "ok &= jsval_to_long_long(cx, ${in_value}, &${out_value})"
-    "std::string": "ok &= jsval_to_std_string(cx, ${in_value}, &${out_value})"
-    "char*": "std::string ${out_value}_tmp; ok &= jsval_to_std_string(cx, ${in_value}, &${out_value}_tmp); ${out_value} = ${out_value}_tmp.c_str()"
-    "Point": "ok &= jsval_to_ccpoint(cx, ${in_value}, &${out_value})"
-    "Rect": "ok &= jsval_to_ccrect(cx, ${in_value}, &${out_value})"
-    "Size": "ok &= jsval_to_ccsize(cx, ${in_value}, &${out_value})"
-    "Color4B": "ok &= jsval_to_cccolor4b(cx, ${in_value}, &${out_value})"
-    "Color4F": "ok &= jsval_to_cccolor4f(cx, ${in_value}, &${out_value})"
-    "Color3B": "ok &= jsval_to_cccolor3b(cx, ${in_value}, &${out_value})"
-    "Array*": "ok &= jsval_to_ccarray(cx, ${in_value}, &${out_value})"
-    "Dictionary*": "ok &= jsval_to_ccdictionary(cx, ${in_value}, &${out_value})"
-    "AffineTransform": "ok &= jsval_to_ccaffinetransform(cx, ${in_value}, &${out_value})"
-    "FontDefinition":  "ok &= jsval_to_FontDefinition(cx, ${in_value}, &${out_value})"
-    "String*": "std::string ${out_value}_tmp; ok &= jsval_to_std_string(cx, ${in_value}, &${out_value}_tmp); ${out_value} = cocos2d::String::create(${out_value}_tmp)"
+    int: "int ${out_value} = *(int *)cx->top()"
+    "int*": "int* ${out_value} = (int *)cx->top()"
+    "unsigned int": "unsigned int ${out_value} = *(unsigned int*)cx->top()"
+    "unsigned int*": "unsigned int* ${out_value} = (unsigned int*)cx->top()"
+    "unsigned char": "unsigned char ${out_value} = *(unsigned char*)cx->top()"
+    "unsigned char*": "unsigned char* ${out_value} = (unsigned char)cx->top()"
+    short: "short ${out_value} = *(short*)cx->top()"
+    "short*": "short* ${out_value} = (short*)cx->top()"
+    "unsigned short": "unsigned short ${out_value} = *(unsigned short*)cx->top()"
+    "unsigned short*": "unsigned short* ${out_value} = (unsigned short*)cx->top()"
+    char: "char ${out_value} = *(char*)cx->top()"
+    "char*": "char* ${out_value} = (char*)cx->top()"
+    bool: "bool ${out_value} = *(bool*)cx->top()"
+    float: "float ${out_value} = *(float*)cx->top()"
+    "float*": "float* ${out_value} = (float*)cx->top()"
+    double: "double ${out_value} = *(double*)cx->top()"
+    "double*": "double* ${out_value} = (double*)cx->top()"
+    long: "long ${out_value} = *(long*)cx->top()"
+    "long*": "long* ${out_value} = (long*)cx->top()"
+    "unsigned long": "unsigned long ${out_value} = *(unsigned long*)cx->top()"
+    "ssize_t": "ssize_t ${out_value} = *(ssize_t*)cx->top()"
+    "long long": "long long ${out_value} = *(long long*)cx->top()"
+    "std::string": "std::string ${out_value} = ((string*)cx->top()).c_str()"
+    "char*": "char* ${out_value} = (char*)cx->top()"
+    "Point": "Point ${out_value} = *(Point*)cx->top()"
+    "Rect": "Rect ${out_value} = *(Rect*)cx->top()"
+    "Size": "Size ${out_value} = *(Size*)cx->top()"
+    "Color4B": "Color4B ${out_value} = *(Color4B*)cx->top()"
+    "Color4F": "Color4F ${out_value} = *(Color4F*)cx->top()"
+    "Color3B": "Color3B ${out_value} = *(Color3B*)cx->top()"
+    "Array*": "Array* ${out_value} = (Array*)cx->top()"
+    "Dictionary*": "Dictionary* ${out_value} = (Dictionary*)cx->top()"
+    "AffineTransform": "AffineTransform ${out_value} = *(AffineTransform*)cx->top()"
+    "FontDefinition":  "FontDefinition ${out_value} = *(FontDefinition*)cx->top()"
+    "String*": "String* ${out_value} = (String*)cx->top()"
+    "void*": "void* ${out_value} = cx->top()"
+    "_MipmapInfo*": "_MipmapInfo* ${out_value} = (_MipmapInfo*)cx->top()"
+    "kmMat4": "kmMat4 ${out_value} = *(kmMat4*)cx->top()"
+    "kmVec3": "kmVec3 ${out_value} = *(kmVec3*)cx->top()"
+    "Tile*": "Tile* ${out_value} = (Tile*)cx->top()"
+    "TMXTileFlags_*": "(TMXTileFlags_*) ${out_value} = (TMXTileFlags_*)cx->top()"
+    "sImageTGA*": "sImageTGA* ${out_value} = (sImageTGA*)cx->top()"
+    "sParticle*": "sParticle* ${out_value} = (sParticle*)cx->top()"
+    "_ccArray*": "sParticle* ${out_value} = (sParticle*)cx->top()"
     "@Vector<.*>": "ok &= jsval_to_ccvector(cx, ${in_value}, &${out_value})"
     "@Map<std::basic_string.*>": "ok &= jsval_to_ccmap_string_key(cx, ${in_value}, &${out_value})"
     "Value": "ok &= jsval_to_ccvalue(cx, ${in_value}, &${out_value})"
@@ -49,15 +66,7 @@ conversions:
     "ValueVector": "ok &= jsval_to_ccvaluevector(cx, ${in_value}, &${out_value})"
     "@vector<std::basic_string.*>": "ok &= jsval_to_std_vector_string(cx, ${in_value}, &${out_value})"
     "@vector<int.*>": "ok &= jsval_to_std_vector_int(cx, ${in_value}, &${out_value})"
-    object: |
-      do {
-      ${($level + 1) * '\t'}if (!${in_value}.isObject()) { ok = JS_FALSE; break; }
-      ${($level + 1) * '\t'}js_proxy_t *proxy;
-      ${($level + 1) * '\t'}JSObject *tmpObj = JSVAL_TO_OBJECT(${in_value});
-      ${($level + 1) * '\t'}proxy = jsb_get_js_proxy(tmpObj);
-      ${($level + 1) * '\t'}${out_value} = (${ntype})(proxy ? proxy->ptr : NULL);
-      ${($level + 1) * '\t'}JSB_PRECONDITION2( ${out_value}, cx, JS_FALSE, "Invalid Native Object");
-      ${($level + 0) * '\t'}} while (0)
+    object: "${ntype} ${out_value} = (${ntype})cx->top()"
 
   from_native:
     # int to jsval
@@ -86,19 +95,11 @@ conversions:
     "FontDefinition": "${out_value} = FontDefinition_to_jsval(cx, ${in_value})"
     "String*": "${out_value} = std_string_to_jsval(cx, ${in_value}->getCString())"
     "@Vector<.*>": "${out_value} = ccvector_to_jsval(cx, ${in_value})"
-    "@Map<std::basic_string.*>": "${out_value} = ccmap_string_key_to_jsval(cx, ${in_value})"
-    "Value": "${out_value} = ccvalue_to_jsval(cx, ${in_value})"
-    "ValueMap": "${out_value} = ccvaluemap_to_jsval(cx, ${in_value})"
-    "ValueMapIntKey": "${out_value} = ccvaluemapintkey_to_jsval(cx, ${in_value})"
-    "ValueVector": "${out_value} = ccvaluevector_to_jsval(cx, ${in_value})"
-    "@vector<std::basic_string.*>": "${out_value} = ccvector_std_string_to_jsval(cx, ${in_value})"
-    "@vector<int.*>": "${out_value} = ccvector_int_to_jsval(cx, ${in_value})"
-    object: |
-      do {
-      ${($level + 1) * '\t'}if (${in_value}) {
-      ${($level + 2) * '\t'}js_proxy_t *proxy = js_get_or_create_proxy<${ntype.replace("*", "").replace("const ", "")}>(cx, (${ntype.replace("const ", "")})${in_value});
-      ${($level + 2) * '\t'}${out_value} = OBJECT_TO_JSVAL(proxy->obj);
-      ${($level + 1) * '\t'}} else {
-      ${($level + 2) * '\t'}${out_value} = JSVAL_NULL;
-      ${($level + 1) * '\t'}}
-      ${($level) * '\t'}} while (0)
+    "@Map<std::basic_string.*>": "cx->push((void*)&ret)"
+    "Value": "cx->push((void*)&ret)"
+    "ValueMap": "cx->push((void*)&ret)"
+    "ValueMapIntKey": "cx->push((void*)&ret)"
+    "ValueVector": "cx->push((void*)&ret)"
+    "@vector<std::basic_string.*>": "cx->push((void*)&ret)"
+    "@vector<int.*>": "cx->push((void*)ret)"
+    object: "cx->push((void*)ret)"

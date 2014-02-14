@@ -5,6 +5,7 @@
 
 \#include "cocos2d.h"
 \#include "csxbindinghelper.h"
+\#include "variant.h"
 \#include <stack>
 \#include <map>
 \#include <stdint.h>
