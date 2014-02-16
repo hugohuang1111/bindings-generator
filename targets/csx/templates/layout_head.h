@@ -4,10 +4,7 @@
 \#define __csx_${prefix}_h__
 
 \#include "cocos2d.h"
-\#include "csxbindinghelper.h"
-\#include "variant.h"
-\#include <stack>
-\#include <map>
+\#include "csxBindingObject.h"
 \#include <stdint.h>
 
 using namespace std;

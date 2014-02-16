@@ -1,6 +1,6 @@
 
 ## ===== instance function implementation template
-void ${signature_name}(CSXContext *cx, uint32_t argc)
+void ${signature_name}(CSXContext *cx)
 {
 #if not $is_constructor
 	## ===== get the object from top of the stack
@@ -8,6 +8,7 @@ void ${signature_name}(CSXContext *cx, uint32_t argc)
 	cx->pop();
 #end if
 
+	size_t argc = cx->size();
 ## ====== Generate function calls
 #if len($arguments) >= $min_args
 	#set arg_count = len($arguments)
