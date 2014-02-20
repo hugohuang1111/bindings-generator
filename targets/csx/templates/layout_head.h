@@ -4,7 +4,7 @@
 \#define __csx_${prefix}_h__
 
 \#include "cocos2d.h"
-\#include "csxBindingObject.h"
+\#include "csxObject.h"
 \#include <stdint.h>
 
 using namespace std;
