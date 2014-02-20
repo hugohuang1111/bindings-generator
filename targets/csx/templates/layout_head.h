@@ -9,3 +9,5 @@
 
 using namespace std;
 using namespace csx;
+
+void csx_register_all_cocos2dx();
