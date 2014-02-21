@@ -2,7 +2,7 @@
 ## ===== static overloaded function implementation template
 void ${signature_name}(int argc, va_list args)
 {
-#if $implementations[0].ret_type.name != "void"
+#if $has_return
 	Variant& retVar = *va_arg(args, Variant*);
 #end if
 ## ====== Generate function calls
@@ -18,7 +18,7 @@ void ${signature_name}(int argc, va_list args)
 		#while $count < $arg_idx
 			#set $arg = $func.arguments[$count]
 		#if $arg.is_reference
-		${arg} arg${count} = *va_arg(args, $arg.name*);
+		${arg} arg${count} = *va_arg(args, $arg.to_string($generator)*);
 		#else
 		${arg} arg${count} = va_arg(args, $arg);
 		#end if

@@ -23,7 +23,7 @@ void ${signature_name}(int argc, va_list args)
 		#while $count < $arg_idx
 			#set $arg = $arguments[$count]
 		#if $arg.is_reference
-		${arg} arg${count} = *va_arg(args, $arg.name*);
+		${arg} arg${count} = *va_arg(args, $arg.to_string($generator)*);
 		#else
 		${arg} arg${count} = va_arg(args, $arg);
 		#end if

@@ -501,8 +501,11 @@ class NativeOverloadedFunction(object):
         self.signature_name = self.func_name
         self.min_args = 100
         self.is_constructor = False
+        self.has_return = False
         for m in func_array:
             self.min_args = min(self.min_args, m.min_args)
+            if m.ret_type != 'void':
+                self.has_return = True
 
     def append(self, func):
         self.min_args = min(self.min_args, func.min_args)
