@@ -19,6 +19,8 @@ void ${signature_name}(int argc, va_list args)
 			#set $arg = $func.arguments[$count]
 		#if $arg.is_reference
 		${arg} arg${count} = *va_arg(args, $arg.to_string($generator)*);
+		#else if $arg.isPOD()
+		${arg} arg${count} = *va_arg(args, $arg.to_string($generator)*);
 		#else
 		${arg} arg${count} = va_arg(args, $arg);
 		#end if
