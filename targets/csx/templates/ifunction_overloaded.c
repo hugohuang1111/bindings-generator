@@ -1,14 +1,16 @@
 
 ## ===== instance function implementation template
-void ${signature_name}(CSXContext *cx)
+void ${signature_name}(int argc, va_list args)
 {
 #if not $is_constructor
 	## ===== get the object from top of the stack
-	$namespaced_class_name* obj = cx->top()->getValue<$namespaced_class_name*>();
-	cx->pop();
+	$namespaced_class_name* obj = va_arg(args, $namespaced_class_name*);
 #end if
 
-	size_t argc = cx->size();
+#if $implementations[0].ret_type.name != "void"
+	Variant& retVar = *va_arg(args, Variant*);
+#end if
+
 ## ====== Generate function calls
 #for func in $implementations
 #if len($func.arguments) >= $func.min_args
@@ -21,8 +23,11 @@ void ${signature_name}(CSXContext *cx)
 		#set $count = 0;
 		#while $count < $arg_idx
 			#set $arg = $func.arguments[$count]
-		${arg} arg${count} = cx->top()->getValue<$arg>();
-		cx->pop();
+		#if $arg.is_reference
+		${arg} arg${count} = *va_arg(args, $arg.name*);
+		#else
+		${arg} arg${count} = va_arg(args, $arg);
+		#end if
 			#set $count = $count + 1
 		#end while
 		## ===== generation agument list
@@ -43,13 +48,11 @@ void ${signature_name}(CSXContext *cx)
 			#else
 		${func.ret_type.get_whole_name($generator)} ret = obj->${func.func_name}($arg_list);
 			#end if
-		Variant* retVar = new Variant();
 		#if $func.ret_type.is_enum
-		retVar->setValue<int>(ret);
+		retVar.setValue<int>(ret);
 		#else
-		retVar->setValue<${func.ret_type.get_whole_name($generator)}>(ret);
+		retVar.setValue<${func.ret_type.get_whole_name($generator)}>(ret);
 		#end if
-		cx->push(retVar);
 		#else
 		obj->${func.func_name}($arg_list);
 		#end if

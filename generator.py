@@ -137,6 +137,7 @@ class NativeType(object):
         self.whole_name = None
         self.is_const = False
         self.is_pointer = False
+        self.is_reference = False
         self.canonical_type = None
 
     @staticmethod
@@ -167,6 +168,8 @@ class NativeType(object):
 
             if None != nt.canonical_type:
                 nt.canonical_type.whole_name += "&"
+
+            nt.is_reference = True
         else:
             nt = NativeType()
             decl = ntype.get_declaration()
