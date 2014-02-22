@@ -1,10 +1,7 @@
 
 ## ===== static overloaded function implementation template
-void ${signature_name}(int argc, va_list args)
+void ${signature_name}(Variant& retVar, int argc, va_list args)
 {
-#if $has_return
-	Variant& retVar = *va_arg(args, Variant*);
-#end if
 ## ====== Generate function calls
 #for func in $implementations
 #if len($func.arguments) >= $func.min_args
@@ -51,6 +48,7 @@ void ${signature_name}(int argc, va_list args)
 		#end if
 		#else
 		$namespaced_class_name::${func.func_name}($arg_list);
+		retVar = nullptr;
 		#end if
 	}
 		#set $arg_idx = $arg_idx + 1

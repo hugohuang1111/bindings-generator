@@ -1,9 +1,6 @@
 ## ===== static function implementation template
-void ${signature_name}(int argc, va_list args)
+void ${signature_name}(Variant& retVar, int argc, va_list args)
 {
-#if $ret_type.name != "void"
-	Variant& retVar = *va_arg(args, Variant*);
-#end if
 ## ====== Generate function calls
 #if len($arguments) >= $min_args
 	#set arg_count = len($arguments)
@@ -49,6 +46,7 @@ void ${signature_name}(int argc, va_list args)
 		#end if
 		#else
 		$namespaced_class_name::${func_name}($arg_list);
+		retVar = nullptr;
 		#end if
 	}
 		#set $arg_idx = $arg_idx + 1

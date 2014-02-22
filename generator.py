@@ -395,6 +395,9 @@ class NativeType(object):
 
     # if it's a c type
     def isPOD(self):
+        if self.is_pointer:
+            return False;
+
         if None != self.canonical_type:
             return False;
 

@@ -1,14 +1,10 @@
 
 ## ===== instance function implementation template
-void ${signature_name}(int argc, va_list args)
+void ${signature_name}(Variant& retVar, int argc, va_list args)
 {
 #if not $is_constructor
 	## ===== get the object from top of the stack
 	$namespaced_class_name* obj = va_arg(args, $namespaced_class_name*);
-#end if
-
-#if $ret_type.name != "void"
-	Variant& retVar = *va_arg(args, Variant*);
 #end if
 
 ## ====== Generate function calls
@@ -56,6 +52,7 @@ void ${signature_name}(int argc, va_list args)
 		#end if
 		#else
 		obj->${func_name}($arg_list);
+		retVar = nullptr;
 		#end if
 	}
 		#set $arg_idx = $arg_idx + 1
