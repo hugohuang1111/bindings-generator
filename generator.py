@@ -132,6 +132,7 @@ class NativeType(object):
         self.not_supported = False
         self.param_types = []
         self.ret_type = None
+        self.base_name = ""
         self.namespaced_name = ""
         self.name = ""
         self.whole_name = None
@@ -150,6 +151,7 @@ class NativeType(object):
                 nt.canonical_type.namespaced_name += "*"
                 nt.canonical_type.whole_name += "*"
 
+            nt.base_name = nt.name
             nt.name += "*"
             nt.namespaced_name += "*"
             nt.whole_name = nt.namespaced_name
@@ -162,6 +164,7 @@ class NativeType(object):
             nt = NativeType.from_type(ntype.get_pointee())
             nt.is_const = ntype.get_pointee().is_const_qualified()
             nt.whole_name = nt.namespaced_name + "&"
+            nt.base_name = nt.name
 
             if nt.is_const:
                 nt.whole_name = "const " + nt.whole_name
@@ -178,6 +181,7 @@ class NativeType(object):
                 if decl.kind == cindex.CursorKind.CLASS_DECL:
                     nt.is_object = True
                 nt.name = decl.displayname
+                nt.base_name = nt.name
                 nt.namespaced_name = get_namespaced_name(decl)
                 nt.whole_name = nt.namespaced_name
             else:
@@ -227,9 +231,12 @@ class NativeType(object):
                     nt.ret_type = NativeType.from_string(ret_type)
                     nt.param_types = [NativeType.from_string(string) for string in params]
 
+                nt.base_name = nt.name
+
         # mark argument as not supported
         if nt.name == INVALID_NATIVE_TYPE:
             nt.not_supported = True
+            nt.base_name = nt.name
 
         return nt
 

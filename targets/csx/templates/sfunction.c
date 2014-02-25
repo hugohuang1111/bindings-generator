@@ -1,5 +1,5 @@
 ## ===== static function implementation template
-void ${signature_name}(Variant& retVar, int argc, va_list args)
+void ${signature_name}(QVariant& retVar, int argc, va_list args)
 {
 ## ====== Generate function calls
 #if len($arguments) >= $min_args
@@ -39,14 +39,15 @@ void ${signature_name}(Variant& retVar, int argc, va_list args)
 			#else
 		${ret_type.get_whole_name($generator)} ret = $namespaced_class_name::${func_name}($arg_list);
 			#end if
-		#if $ret_type.is_enum
-		retVar.setValue<int>(ret);
+		#if $ret_type.is_object
+		auto service = CSX()->getService<ClassFactoryServiceInterface>();
+		auto retObjVal = service->createObject(kcc$ret_type.base_name, ret);
+		retVar.setValue(retObjVal);
 		#else
-		retVar.setValue<${ret_type.get_whole_name($generator)}>(ret);
+		retVar.setValue(ret);
 		#end if
 		#else
 		$namespaced_class_name::${func_name}($arg_list);
-		retVar = nullptr;
 		#end if
 	}
 		#set $arg_idx = $arg_idx + 1

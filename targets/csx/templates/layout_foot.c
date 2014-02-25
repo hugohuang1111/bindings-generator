@@ -7,3 +7,6 @@ void csx_register_all_${prefix}()
 	#end if
 	#end for
 }
+
+## ----- End of namespace
+}

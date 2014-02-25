@@ -1,6 +1,6 @@
 
 ## ===== static overloaded function implementation template
-void ${signature_name}(Variant& retVar, int argc, va_list args)
+void ${signature_name}(QVariant& retVar, int argc, va_list args)
 {
 ## ====== Generate function calls
 #for func in $implementations
@@ -41,14 +41,15 @@ void ${signature_name}(Variant& retVar, int argc, va_list args)
 			#else
 		${func.ret_type.get_whole_name($generator)} ret = $namespaced_class_name::${func.func_name}($arg_list);
 			#end if
-		#if $func.ret_type.is_enum
-		retVar.setValue<int>(ret);
+		#if $func.ret_type.is_object
+		auto service = CSX()->getService<ClassFactoryServiceInterface>();
+		auto retObjVal = service->createObject(kcc$func.ret_type.base_name, ret);
+		retVar.setValue(retObjVal);
 		#else
-		retVar.setValue<${func.ret_type.get_whole_name($generator)}>(ret);
+		retVar.setValue(ret);
 		#end if
 		#else
 		$namespaced_class_name::${func.func_name}($arg_list);
-		retVar = nullptr;
 		#end if
 	}
 		#set $arg_idx = $arg_idx + 1

@@ -1,9 +1,14 @@
 
 ## ----- Generate Hashed IDs for cocos2d-x classes
+enum
+{
 #for csxclass in $sorted_classes
 	#if $in_listed_classes(csxclass)
-\#define	k${csxclass} = HASH("${csxclass}")
+	kcc${csxclass} = HASH("${csxclass}"),
 	#end if
 #end for
+};
 
+## ----- End of namespace
+}
 \#endif
