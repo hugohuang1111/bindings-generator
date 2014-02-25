@@ -6,6 +6,7 @@
 \#include "cocos2d.h"
 \#include "csxBindingBase.h"
 \#include "csxUtilities.h"
+\#include "csxcocos2dxbindinghelper.h"
 \#include <stdint.h>
 \#include <QVariant>
 

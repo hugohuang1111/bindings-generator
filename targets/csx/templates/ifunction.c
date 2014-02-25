@@ -46,9 +46,9 @@ void ${signature_name}(QVariant& retVar, int argc, va_list args)
 		${ret_type.get_whole_name($generator)} ret = obj->${func_name}($arg_list);
 			#end if
 		## ----- Wrap object with csx Object if return value is a pointer to cc object
-		#if $ret_type.is_object
+		#if $ret_type.is_object and $ret_type.is_pointer
 		auto service = CSX()->getService<ClassFactoryServiceInterface>();
-		auto retObjVal = service->createObject(kcc$ret_type.base_name, ret);
+		auto retObjVal = service->createObject(kcc$ret_type.base_name, (void*)ret);
 		retVar.setValue(retObjVal);
 		#else
 		retVar.setValue(ret);
