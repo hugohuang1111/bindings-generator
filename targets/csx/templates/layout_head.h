@@ -4,7 +4,7 @@
 \#define __csx_${prefix}_h__
 
 \#include "cocos2d.h"
-\#include "csxBindingBase.h"
+\#include "csxobject.h"
 \#include "csxUtilities.h"
 \#include "csxcocos2dxbindinghelper.h"
 \#include <stdint.h>
