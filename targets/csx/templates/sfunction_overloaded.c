@@ -1,6 +1,6 @@
 
 ## ===== static overloaded function implementation template
-void ${signature_name}(QVariant& retVar, int argc, va_list args)
+void ${signature_name}(ObjectInterface::tHandle object, QVariant& retVar, int argc, va_list args)
 {
 ## ====== Generate function calls
 #for func in $implementations

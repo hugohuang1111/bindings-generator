@@ -1,5 +1,5 @@
 ## ===== static function implementation template
-void ${signature_name}(QVariant& retVar, int argc, va_list args)
+void ${signature_name}(ObjectInterface::tHandle object, QVariant& retVar, int argc, va_list args)
 {
 ## ====== Generate function calls
 #if len($arguments) >= $min_args

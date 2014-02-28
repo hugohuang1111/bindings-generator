@@ -1,10 +1,10 @@
 
 ## ===== instance function implementation template
-void ${signature_name}(QVariant& retVar, int argc, va_list args)
+void ${signature_name}(ObjectInterface::tHandle object, QVariant& retVar, int argc, va_list args)
 {
 #if not $is_constructor
 	## ===== get the object from top of the stack
-	$namespaced_class_name* obj = va_arg(args, $namespaced_class_name*);
+	$namespaced_class_name* obj = ($namespaced_class_name*)object;
 #end if
 
 ## ====== Generate function calls

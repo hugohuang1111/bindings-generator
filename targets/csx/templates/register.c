@@ -7,13 +7,13 @@ void csx_register_${current_class.class_name}()
 {
 	#for m in methods
 	#set fn = m['impl']
-	Object::registerFunction("${current_class.class_name}", HASH("${current_class.class_name}"), "${m['name']}", &${fn.signature_name});
+	CLASS_FACTORY->registerFunction("${current_class.class_name}", HASH("${current_class.class_name}"), "${m['name']}", &${fn.signature_name});
 	#end for
 	#for m in st_methods
 	#set fn = m['impl']
-	Object::registerFunction("${current_class.class_name}", HASH("${current_class.class_name}"), "${m['name']}", &${fn.signature_name});
+	CLASS_FACTORY->registerFunction("${current_class.class_name}", HASH("${current_class.class_name}"), "${m['name']}", &${fn.signature_name});
 	#end for
 	#for p in parents
-	Object::registerParent(HASH("${current_class.class_name}"), HASH("${p.class_name}"));
+	CLASS_FACTORY->registerParent(HASH("${current_class.class_name}"), HASH("${p.class_name}"));
 	#end for
 }

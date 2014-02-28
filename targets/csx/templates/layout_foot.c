@@ -11,7 +11,7 @@ void csx_register_all_${prefix}()
 	auto classFactory = CSX()->getService<ClassFactoryServiceInterface>();
 	#for csxclass in $sorted_classes
 	#if $in_listed_classes(csxclass)
-	classFactory->registerFactory(HASH("${csxclass}"), createCocos2dClass);
+	classFactory->registerFactory(HASH("${csxclass}"), &createCocos2dClass);
 	#end if
 	#end for
 }
