@@ -4,9 +4,10 @@
 \#define __csx_${prefix}_h__
 
 \#include "cocos2d.h"
-\#include "csxobject.h"
+\#include "CocosGUI.h"
+\#include "csxObject.h"
 \#include "csxUtilities.h"
-\#include "csxcocos2dxbindinghelper.h"
+\#include "csxCocos2dxBindingHelper.h"
 \#include <stdint.h>
 \#include <QVariant>
 
