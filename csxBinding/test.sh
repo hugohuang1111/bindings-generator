@@ -9,7 +9,7 @@
 set -e
 
 # Point COCOS2DX_ROOT to CSX
-COCOS2DX_ROOT=/Users/niteluo/Projects/CocoStudioX/cocos2d-x
+COCOS2DX_ROOT=../../cocos2d-x
 
 # read user.cfg if it exists and is readable
 
@@ -57,7 +57,7 @@ CONFIG_FILE="$PROJECT_ROOT/test.ini"
 # set output dir
 OUTPUT_DIR=./output
 
-OUTPUT_FILE="csxcocos2dxbinding"
+OUTPUT_FILE="csxCocos2dxBinding"
 
 # TARGET="spidermonkey"
 # TARGET="lua"
