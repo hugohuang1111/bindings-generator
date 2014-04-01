@@ -39,13 +39,20 @@ void ${signature_name}(ObjectInterface::tHandle object, QVariant& retVar, int ar
 			#else
 		${ret_type.get_whole_name($generator)} ret = $namespaced_class_name::${func_name}($arg_list);
 			#end if
-		#if $ret_type.is_object and $ret_type.is_pointer
+			#if $ret_type.is_object and $ret_type.is_pointer
 		auto service = CSX()->getService<ClassFactoryServiceInterface>();
 		auto retObjVal = service->createObject(kcc$ret_type.base_name, (void*)ret);
 		retVar.setValue(retObjVal);
-		#else
+			#else  if $ret_type.has_from_native($generator)
+		${ret_type.from_native({"generator": $generator,
+								"in_value": "ret",
+								"out_value": "qtret",
+								"ntype": str($ret_type),
+								"level": 3})};
+		retVar.setValue(qtret);
+			#else
 		retVar.setValue(ret);
-		#end if
+			#end if
 		#else
 		$namespaced_class_name::${func_name}($arg_list);
 		#end if

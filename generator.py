@@ -298,6 +298,26 @@ class NativeType(object):
                         return v
         return None
 
+    def has_from_native(self, generator):
+        keys = []
+
+        if self.canonical_type != None:
+            keys.append(self.canonical_type.name)
+        keys.append(self.name)
+
+        from_native_dict = generator.config['conversions']['from_native']
+
+        if self.is_object:
+            if not NativeType.dict_has_key_re(from_native_dict, keys):
+                keys.append("object")
+        elif self.is_enum:
+            keys.append("int")
+
+        if NativeType.dict_has_key_re(from_native_dict, keys):
+            return True
+
+        return False
+
     def from_native(self, convert_opts):
         assert(convert_opts.has_key('generator'))
         generator = convert_opts['generator']
