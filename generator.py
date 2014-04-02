@@ -262,7 +262,8 @@ class NativeType(object):
             for (k, v) in dict.items():
                 if k.startswith('@'):
                     k = k[1:]
-                    match = re.match("^" + k + "$", real_key)
+                    # Evaluate the regex and finds the pointer and reference
+                    match = re.match("^" + k + "\\s*[&\\*]*$", real_key)
                     if match:
                         return True
                 else:
