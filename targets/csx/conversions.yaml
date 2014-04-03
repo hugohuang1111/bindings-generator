@@ -85,7 +85,7 @@ conversions:
     # "AffineTransform": "${out_value} = ccaffinetransform_to_jsval(cx, ${in_value})"
     # "FontDefinition": "${out_value} = FontDefinition_to_jsval(cx, ${in_value})"
     # "String*": "${out_value} = std_string_to_jsval(cx, ${in_value}->getCString())"
-    "@.*Vector<.*Node.*>.*": "QList<tObjectPtr> ${out_value} = convert_children(${in_value})"
+    "@.*Vector<.*>.*": "QList<tObjectPtr> ${out_value} = convert_vector(${in_value})"
     # "@Map<std::basic_string.*>": "cx->push((void*)&ret)"
     # "Value": "cx->push((void*)&ret)"
     # "ValueMap": "cx->push((void*)&ret)"
