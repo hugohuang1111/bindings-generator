@@ -302,6 +302,7 @@ class NativeType(object):
     def has_from_native(self, generator):
         keys = []
 
+        # Find the real name for a type
         if self.canonical_type != None:
             keys.append(self.canonical_type.name)
         keys.append(self.name)
@@ -317,6 +318,27 @@ class NativeType(object):
         if NativeType.dict_has_key_re(from_native_dict, keys):
             return True
 
+        return False
+
+    def has_to_native(self, generator):
+        keys = []
+
+        # Find the real name for a type
+        if self.canonical_type != None:
+            keys.append(self.canonical_type.name)
+        keys.append(self.name)
+
+        to_native_dict = generator.config['conversions']['to_native']
+
+        if self.is_object:
+            if not NativeType.dict_has_key_re(to_native_dict, keys):
+                keys.append("object")
+        elif self.is_enum:
+            keys.append("int")
+
+        if NativeType.dict_has_key_re(to_native_dict, keys):
+            return True
+            
         return False
 
     def from_native(self, convert_opts):

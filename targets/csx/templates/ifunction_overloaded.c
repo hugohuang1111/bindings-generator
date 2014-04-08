@@ -19,12 +19,17 @@ void ${signature_name}(ObjectInterface::tHandle object, QVariant& retVar, int ar
 		#set $count = 0;
 		#while $count < $arg_idx
 			#set $arg = $func.arguments[$count]
-		#if $arg.is_reference
+		#if $arg.has_to_native($generator)
+		${arg.to_native({"generator": $generator,
+								"in_value": "arg" + str(count),
+								"out_value": "arg",
+								"class_name": $class_name,
+								"ntype": str($arg),
+								"level": 2})};
+		#else if $arg.is_reference
 		${arg} arg${count} = *va_arg(args, $arg.to_string($generator)*);
 		#else if $arg.is_pointer
 		${arg} arg${count} = va_arg(args, $arg);
-		#else if $arg.isPOD($generator)
-		${arg} arg${count} = va_arg(args, $arg.to_string($generator));
 		#else
 		${arg} arg${count} = *va_arg(args, $arg*);
 		#end if
