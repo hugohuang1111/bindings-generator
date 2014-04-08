@@ -21,10 +21,12 @@ void ${signature_name}(ObjectInterface::tHandle object, QVariant& retVar, int ar
 			#set $arg = $func.arguments[$count]
 		#if $arg.is_reference
 		${arg} arg${count} = *va_arg(args, $arg.to_string($generator)*);
-		#else if $arg.isPOD()
-		${arg} arg${count} = *va_arg(args, $arg.to_string($generator)*);
-		#else
+		#else if $arg.is_pointer
 		${arg} arg${count} = va_arg(args, $arg);
+		#else if $arg.isPOD($generator)
+		${arg} arg${count} = va_arg(args, $arg.to_string($generator));
+		#else
+		${arg} arg${count} = *va_arg(args, $arg*);
 		#end if
 			#set $count = $count + 1
 		#end while

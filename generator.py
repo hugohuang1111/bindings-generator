@@ -421,14 +421,16 @@ class NativeType(object):
         return name
 
     # if it's a c type
-    def isPOD(self):
+    def isPOD(self, generator):
         if self.is_pointer:
             return False;
 
-        if None != self.canonical_type:
-            return False;
+        if generator != None:
+            ctypes = generator.config['ctypes']
+            if self.name in ctypes:
+                return True
 
-        return True;
+        return False;
 
     def __str__(self):
         return  self.canonical_type.whole_name if None != self.canonical_type else self.whole_name

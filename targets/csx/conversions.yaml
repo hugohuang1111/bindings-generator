@@ -4,6 +4,37 @@ definitions:
   ifunction: "csx_${generator.prefix}_${class_name}_${func_name}"
   sfunction: "csx_${generator.prefix}_${class_name}_${func_name}"
   constructor: "csx_${generator.prefix}_${class_name}_constructor"
+ctypes:
+  # va_arg only support c types, so these type don't need to do convertion
+  - bool
+  - char
+  - "signed char"
+  - "unsigned char"
+  - short
+  - "short int"
+  - "signed short"
+  - "signed short int"
+  - "unsigned short"
+  - "unsigned short int"
+  - int
+  - "signed int"
+  - unsigned
+  - "unsigned int"
+  - long
+  - "long int"
+  - "signed long"
+  - "signed long int"
+  - "unsigned long"
+  - "unsigned long int"
+  - "long long"
+  - "long long int"
+  - "signed long long"
+  - "signed long long int"
+  - "unsigned long long"
+  - "unsigned long long int"
+  - float
+  - double
+  - "long double"
 conversions:
   # some times you want to use a special native type when converting from spidermonkey to native
   # the most common case would be from JS-boolean to bool. Using "bool" will fail here since we
