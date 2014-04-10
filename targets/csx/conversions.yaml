@@ -54,6 +54,7 @@ conversions:
     "@std::string": "std::string ${in_value} = (*va_arg(args, QString*)).toStdString()"
     "char*": "const char* ${in_value} = (*va_arg(args, QString*)).toStdString().c_str()"
     "kmMat4": "kmMat4 ${in_value} = to_mat4(*va_arg(args, QMatrix4x4*))"
+    "Vertex3F": "cocos2d::Vertex3F ${in_value} = to_vertex3F(*va_arg(args, QVector3D*))"
     # object: "${ntype} ${out_value} = (${ntype})cx->top()"
 
   from_native:
@@ -68,6 +69,7 @@ conversions:
     "char*": "QString ${out_value}(${in_value})"
     "kmMat4": "QMatrix4x4 ${out_value} = convert_mat4(${in_value})"
     "kmVec3": "QVector3D ${out_value} = convert_vec3(${in_value})"
+    "Vertex3F": "QVector3D ${out_value} = convert_vertex3F(${in_value})"
     # "Array*": "${out_value} = ccarray_to_jsval(cx, ${in_value})"
     # "Dictionary*": "${out_value} = ccdictionary_to_jsval(cx, ${in_value})"
     # "AffineTransform": "${out_value} = ccaffinetransform_to_jsval(cx, ${in_value})"
