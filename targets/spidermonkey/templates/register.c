@@ -11,7 +11,7 @@ ${current_class.methods.constructor.generate_code($current_class)}
 extern JSObject *jsb_${current_class.parents[0].underlined_class_name}_prototype;
 #end if
 
-void js_${current_class.underlined_class_name}_finalize(JSFreeOp *fop, JSObject *obj) {
+void js_${generator.prefix}_${current_class.class_name}_finalize(JSFreeOp *fop, JSObject *obj) {
     CCLOGINFO("jsbindings: finalizing JS object %p (${current_class.class_name})", obj);
 #if $generator.script_control_cpp
     js_proxy_t* nproxy;
@@ -61,7 +61,7 @@ void js_register_${generator.prefix}_${current_class.class_name}(JSContext *cx, 
     jsb_${current_class.underlined_class_name}_class->enumerate = JS_EnumerateStub;
     jsb_${current_class.underlined_class_name}_class->resolve = JS_ResolveStub;
     jsb_${current_class.underlined_class_name}_class->convert = JS_ConvertStub;
-    jsb_${current_class.underlined_class_name}_class->finalize = js_${current_class.underlined_class_name}_finalize;
+    jsb_${current_class.underlined_class_name}_class->finalize = js_${generator.prefix}_${current_class.class_name}_finalize;
     jsb_${current_class.underlined_class_name}_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
@@ -144,7 +144,7 @@ void js_register_${generator.prefix}_${current_class.class_name}(JSContext *cx, 
     jsb_${current_class.underlined_class_name}_class->enumerate = JS_EnumerateStub;
     jsb_${current_class.underlined_class_name}_class->resolve = JS_ResolveStub;
     jsb_${current_class.underlined_class_name}_class->convert = JS_ConvertStub;
-    jsb_${current_class.underlined_class_name}_class->finalize = js_${current_class.underlined_class_name}_finalize;
+    jsb_${current_class.underlined_class_name}_class->finalize = js_${generator.prefix}_${current_class.class_name}_finalize;
     jsb_${current_class.underlined_class_name}_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 
     static JSPropertySpec properties[] = {
