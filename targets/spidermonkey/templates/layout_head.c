@@ -4,6 +4,7 @@
 \#include "${os.path.basename(header)}"
 #end for
 
+\#if defined(MOZJS_MAJOR_VERSION)
 \#if MOZJS_MAJOR_VERSION >= 33
 template<class T>
 static bool dummy_constructor(JSContext *cx, uint32_t argc, jsval *vp) {
@@ -96,5 +97,34 @@ static bool js_is_native_obj(JSContext *cx, JS::HandleObject obj, JS::HandleId i
 {
     vp.set(BOOLEAN_TO_JSVAL(true));
     return true;    
+}
+\#endif
+\#elif defined(JS_VERSION)
+template<class T>
+static JSBool dummy_constructor(JSContext *cx, uint32_t argc, jsval *vp) {
+    TypeTest<T> t;
+    T* cobj = new T();
+#if not $script_control_cpp
+    cocos2d::CCObject *_ccobj = dynamic_cast<cocos2d::CCObject *>(cobj);
+    if (_ccobj) {
+        _ccobj->autorelease();
+    }
+#end if
+    js_type_class_t *p;
+    uint32_t typeId = t.s_id();
+    HASH_FIND_INT(_js_global_type_ht, &typeId, p);
+    assert(p);
+    JSObject *_tmp = JS_NewObject(cx, p->jsclass, p->proto, p->parentProto);
+    js_proxy_t *pp = jsb_new_proxy(cobj, _tmp);
+#if not $script_control_cpp
+    JS_AddObjectRoot(cx, &pp->obj);
+#end if
+    JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(_tmp));
+
+    return JS_TRUE;
+}
+
+static JSBool empty_constructor(JSContext *cx, uint32_t argc, jsval *vp) {
+    return JS_FALSE;
 }
 \#endif
