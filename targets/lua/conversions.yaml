@@ -28,6 +28,7 @@ conversions:
     "cocosbuilder::": "cc."
     "CocosDenshion::": "cc."
     "cocos::": "sc."
+    "sdkbox::": "sdkbox."
 
   to_native:
     # lua to native
