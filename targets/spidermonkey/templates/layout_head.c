@@ -3,6 +3,7 @@
 #for header in $headers
 \#include "${os.path.basename(header)}"
 #end for
+\#include "SDKBoxJSHelper.h"
 
 \#if defined(MOZJS_MAJOR_VERSION)
 \#if MOZJS_MAJOR_VERSION >= 33
