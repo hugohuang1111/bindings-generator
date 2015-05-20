@@ -6,6 +6,6 @@ $macro_judgement
 \#include "${os.path.basename(header)}"
 #end for
 \#include "tolua_fix.h"
-\#include "LuaBasicConversions.h"
+\#include "SDKBoxLuaHelper.h"
 
 
