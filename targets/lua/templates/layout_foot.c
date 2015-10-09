@@ -18,7 +18,7 @@ TOLUA_API int register_all_${prefix}(lua_State* tolua_S)
 
 	tolua_endmodule(tolua_S);
 
-	sdkbox::Sdkbox::setProjectType("lua");
+	sdkbox::setProjectType("lua");
 	return 1;
 }
 

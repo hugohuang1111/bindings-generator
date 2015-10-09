@@ -13,7 +13,7 @@ void register_all_${prefix}(JSContext* cx, JS::HandleObject obj) {
     #end if
     #end for
 
-    sdkbox::Sdkbox::setProjectType("js");
+    sdkbox::setProjectType("js");
 }
 \#else
 void register_all_${prefix}(JSContext* cx, JSObject* obj) {
@@ -38,7 +38,7 @@ void register_all_${prefix}(JSContext* cx, JSObject* obj) {
     #end if
     #end for
 
-    sdkbox::Sdkbox::setProjectType("js");
+    sdkbox::setProjectType("js");
 }
 \#endif
 \#elif defined(JS_VERSION)
@@ -64,6 +64,6 @@ void register_all_${prefix}(JSContext* cx, JSObject* obj) {
     #end if
     #end for
 
-    sdkbox::Sdkbox::setProjectType("js");
+    sdkbox::setProjectType("js");
 }
 \#endif
