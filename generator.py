@@ -902,7 +902,11 @@ class NativeClass(object):
 
 class Generator(object):
     def __init__(self, opts):
-        self.index = cindex.Index.create()
+        if platform.system() == 'Darwin':
+            current_dir = os.path.split(os.path.realpath(__file__))[0]
+            libclang_dylib_dir = os.path.join(current_dir, 'libclang')
+            cindex.Config.set_library_path(libclang_dylib_dir)
+	self.index = cindex.Index.create()
         self.outdir = opts['outdir']
         self.prefix = opts['prefix']
         self.headers = opts['headers'].split(' ')
