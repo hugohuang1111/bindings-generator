@@ -13,6 +13,7 @@ import re
 import os
 import inspect
 import traceback
+import platform
 from Cheetah.Template import Template
 
 type_map = {
