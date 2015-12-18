@@ -16,7 +16,15 @@ void js_${generator.prefix}_${current_class.class_name}_finalize(JSFreeOp *fop, 
 #if $generator.script_control_cpp
     js_proxy_t* nproxy;
     js_proxy_t* jsproxy;
+
+\#if (COCOS2D_VERSION >= 0x00031000)
+    JSContext *cx = ScriptingCore::getInstance()->getGlobalContext();
+    JS::RootedObject jsobj(cx, obj);
+    jsproxy = jsb_get_js_proxy(jsobj);
+\#else
     jsproxy = jsb_get_js_proxy(obj);
+\#endif
+
     if (jsproxy) {
         nproxy = jsb_get_native_proxy(jsproxy->ptr);
 
@@ -92,10 +100,13 @@ void js_register_${generator.prefix}_${current_class.class_name}(JSContext *cx, 
     JSFunctionSpec *st_funcs = NULL;
     #end if
 
+#if len($current_class.parents) > 0
+    JS::RootedObject parent_proto(cx, jsb_${current_class.parents[0].underlined_class_name}_prototype);
+#end if
     jsb_${current_class.underlined_class_name}_prototype = JS_InitClass(
         cx, global,
 #if len($current_class.parents) > 0
-        JS::RootedObject(cx, jsb_${current_class.parents[0].underlined_class_name}_prototype),
+        parent_proto,
 #else
         JS::NullPtr(), // parent proto
 #end if
@@ -117,6 +128,17 @@ void js_register_${generator.prefix}_${current_class.class_name}(JSContext *cx, 
 //  JS_SetPropertyAttributes(cx, global, "${current_class.target_class_name}", JSPROP_ENUMERATE | JSPROP_READONLY, &found);
 
     // add the proto and JSClass to the type->js info hash table
+\#if (COCOS2D_VERSION >= 0x00031000)
+    JS::RootedObject proto(cx, jsb_${current_class.underlined_class_name}_prototype);
+#if len($current_class.parents) > 0
+    jsb_register_class<${current_class.namespaced_class_name}>(cx, jsb_${current_class.underlined_class_name}_class, proto, parent_proto);
+#else
+    jsb_register_class<${current_class.namespaced_class_name}>(cx, jsb_${current_class.underlined_class_name}_class, proto, JS::NullPtr());
+#end if
+#if $generator.in_listed_extend_classed($current_class.class_name) and not $current_class.is_abstract
+    anonEvaluate(cx, global, "(function () { ${generator.target_ns}.${current_class.target_class_name}.extend = cc.Class.extend; })()");
+#end if
+\#else
     TypeTest<${current_class.namespaced_class_name}> t;
     js_type_class_t *p;
     std::string typeName = t.s_name();
@@ -132,6 +154,7 @@ void js_register_${generator.prefix}_${current_class.class_name}(JSContext *cx, 
 #end if
         _js_global_type_map.insert(std::make_pair(typeName, p));
     }
+\#endif
 }
 \#else
 void js_register_${generator.prefix}_${current_class.class_name}(JSContext *cx, JSObject *global) {

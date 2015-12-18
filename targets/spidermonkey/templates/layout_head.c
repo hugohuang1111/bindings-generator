@@ -28,8 +28,13 @@ static bool dummy_constructor(JSContext *cx, uint32_t argc, jsval *vp) {
         typeClass = typeMapIter->second;
         CCASSERT(typeClass, "The value is null.");
 
+\#if (COCOS2D_VERSION >= 0x00031000)
+        JS::RootedObject proto(cx, typeClass->proto.ref());
+        JS::RootedObject parent(cx, typeClass->parentProto.ref());
+\#else
         JS::RootedObject proto(cx, typeClass->proto.get());
         JS::RootedObject parent(cx, typeClass->parentProto.get());
+\#endif
         JS::RootedObject _tmp(cx, JS_NewObject(cx, typeClass->jsclass, proto, parent));
         
     #if $script_control_cpp
