@@ -97,7 +97,7 @@ JSBool ${signature_name}(JSContext *cx, uint32_t argc, jsval *vp)
         #end if
         #set $arg_list = ", ".join($arg_array)
     #if str($ret_type) != "void"
-        ${ret_type} ret = ${namespaced_class_name}::${func_name}($arg_list);
+        ${ret_type.get_whole_name($generator)} ret = ${namespaced_class_name}::${func_name}($arg_list);
         jsval jsret;
         ${ret_type.from_native({"generator": $generator,
                                 "in_value": "ret",

@@ -138,6 +138,7 @@ conversions:
     "spAnimation*": "${out_value} = spanimation_to_jsval(cx, *${in_value})"
     "spTrackEntry*": "${out_value} = sptrackentry_to_jsval(cx, *${in_value})"
     "Quaternion": "${out_value} = quaternion_to_jsval(cx, ${in_value})"
+    "@map<std::basic_string<char>,.*std::basic_string<char>.*>": "${out_value} = sdkbox::std_map_string_string_to_jsval(cx, ${in_value})"
     object: |
       do {
       ${($level + 1) * '    '}if (${in_value}) {
