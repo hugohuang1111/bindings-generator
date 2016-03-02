@@ -4,7 +4,7 @@
 \#include "${os.path.basename(header)}"
 #end for
 \#include "SDKBoxJSHelper.h"
-\#include "sdkbox/sdkbox.h"
+\#include "sdkbox/Sdkbox.h"
 
 
 \#if defined(MOZJS_MAJOR_VERSION)
