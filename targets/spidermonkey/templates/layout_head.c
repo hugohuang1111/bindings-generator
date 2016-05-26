@@ -1,5 +1,4 @@
 \#include "${out_file}.hpp"
-\#include "cocos2d_specifics.hpp"
 #for header in $headers
 \#include "${os.path.basename(header)}"
 #end for
