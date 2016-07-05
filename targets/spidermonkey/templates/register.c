@@ -17,7 +17,7 @@ void js_${generator.prefix}_${current_class.class_name}_finalize(JSFreeOp *fop, 
     js_proxy_t* nproxy;
     js_proxy_t* jsproxy;
 
-\#if (COCOS2D_VERSION >= 0x00031000)
+\#if (SDKBOX_COCOS_JSB_VERSION >= 2)
     JSContext *cx = ScriptingCore::getInstance()->getGlobalContext();
     JS::RootedObject jsobj(cx, obj);
     jsproxy = jsb_get_js_proxy(jsobj);
@@ -31,7 +31,7 @@ void js_${generator.prefix}_${current_class.class_name}_finalize(JSFreeOp *fop, 
         ${current_class.namespaced_class_name} *nobj = static_cast<${current_class.namespaced_class_name} *>(nproxy->ptr);
         if (nobj)
             delete nobj;
-        
+
         jsb_remove_proxy(nproxy, jsproxy);
     }
 #end if
@@ -124,11 +124,11 @@ void js_register_${generator.prefix}_${current_class.class_name}(JSContext *cx, 
         st_funcs);
     // make the class enumerable in the registered namespace
 //  bool found;
-//FIXME: Removed in Firefox v27 
+//FIXME: Removed in Firefox v27
 //  JS_SetPropertyAttributes(cx, global, "${current_class.target_class_name}", JSPROP_ENUMERATE | JSPROP_READONLY, &found);
 
     // add the proto and JSClass to the type->js info hash table
-\#if (COCOS2D_VERSION >= 0x00031000)
+\#if (SDKBOX_COCOS_JSB_VERSION >= 2)
     JS::RootedObject proto(cx, jsb_${current_class.underlined_class_name}_prototype);
 #if len($current_class.parents) > 0
     jsb_register_class<${current_class.namespaced_class_name}>(cx, jsb_${current_class.underlined_class_name}_class, proto, parent_proto);
@@ -219,7 +219,7 @@ void js_register_${generator.prefix}_${current_class.class_name}(JSContext *cx, 
         st_funcs);
     // make the class enumerable in the registered namespace
 //  bool found;
-//FIXME: Removed in Firefox v27 
+//FIXME: Removed in Firefox v27
 //  JS_SetPropertyAttributes(cx, global, "${current_class.target_class_name}", JSPROP_ENUMERATE | JSPROP_READONLY, &found);
 
     // add the proto and JSClass to the type->js info hash table

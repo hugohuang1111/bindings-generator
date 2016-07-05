@@ -5,6 +5,13 @@
 \#include "SDKBoxJSHelper.h"
 \#include "sdkbox/Sdkbox.h"
 
+\#if defined(SDKBOX_COCOS_CREATOR)
+    \#define SDKBOX_COCOS_JSB_VERSION 2
+\#elif COCOS2D_VERSION >= 0x00031000
+    \#define SDKBOX_COCOS_JSB_VERSION 2
+\#else
+    \#define SDKBOX_COCOS_JSB_VERSION 1
+\#endif
 
 \#if defined(MOZJS_MAJOR_VERSION)
 \#if MOZJS_MAJOR_VERSION >= 33
@@ -27,7 +34,7 @@ static bool dummy_constructor(JSContext *cx, uint32_t argc, jsval *vp) {
         typeClass = typeMapIter->second;
         CCASSERT(typeClass, "The value is null.");
 
-\#if (COCOS2D_VERSION >= 0x00031000)
+\#if (SDKBOX_COCOS_JSB_VERSION >= 2)
         JS::RootedObject proto(cx, typeClass->proto.ref());
         JS::RootedObject parent(cx, typeClass->parentProto.ref());
 \#else
@@ -35,7 +42,7 @@ static bool dummy_constructor(JSContext *cx, uint32_t argc, jsval *vp) {
         JS::RootedObject parent(cx, typeClass->parentProto.get());
 \#endif
         JS::RootedObject _tmp(cx, JS_NewObject(cx, typeClass->jsclass, proto, parent));
-        
+
     #if $script_control_cpp
         T* cobj = new T();
         js_proxy_t *pp = jsb_new_proxy(cobj, _tmp);
@@ -59,7 +66,7 @@ static bool js_is_native_obj(JSContext *cx, uint32_t argc, jsval *vp)
 {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
     args.rval().setBoolean(true);
-    return true;    
+    return true;
 }
 \#else
 template<class T>
@@ -103,7 +110,7 @@ static bool empty_constructor(JSContext *cx, uint32_t argc, jsval *vp) {
 static bool js_is_native_obj(JSContext *cx, JS::HandleObject obj, JS::HandleId id, JS::MutableHandleValue vp)
 {
     vp.set(BOOLEAN_TO_JSVAL(true));
-    return true;    
+    return true;
 }
 \#endif
 \#elif defined(JS_VERSION)
