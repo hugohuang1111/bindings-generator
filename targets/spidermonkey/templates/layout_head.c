@@ -5,13 +5,6 @@
 \#include "SDKBoxJSHelper.h"
 \#include "sdkbox/Sdkbox.h"
 
-\#if defined(SDKBOX_COCOS_CREATOR)
-    \#define SDKBOX_COCOS_JSB_VERSION 2
-\#elif COCOS2D_VERSION >= 0x00031000
-    \#define SDKBOX_COCOS_JSB_VERSION 2
-\#else
-    \#define SDKBOX_COCOS_JSB_VERSION 1
-\#endif
 
 \#if defined(MOZJS_MAJOR_VERSION)
 \#if MOZJS_MAJOR_VERSION >= 33
