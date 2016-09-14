@@ -67,6 +67,7 @@ conversions:
     "ValueVector": "ok &= jsval_to_ccvaluevector(cx, ${in_value}, &${out_value})"
     "@vector<std::basic_string.*>": "ok &= jsval_to_std_vector_string(cx, ${in_value}, &${out_value})"
     "@vector<int.*>": "ok &= jsval_to_std_vector_int(cx, ${in_value}, &${out_value})"
+    "@vector<unsigned char.*>": "ok &= sdkbox::jsval_to_std_vector_unsinged_char(cx, ${in_value}, &${out_value})"
     "Acceleration": "ok &= jsval_to_ccacceleration(cx, ${in_value}, &${out_value})"
     "Mat4": "ok &= jsval_to_matrix(cx, ${in_value}, &${out_value})"
     "Vec2": "ok &= jsval_to_vector2(cx, ${in_value}, &${out_value})"
