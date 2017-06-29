@@ -30,6 +30,7 @@ conversions:
     "CocosDenshion::": "cc."
     "cocos::": "sc."
     "sdkbox::": "sdkbox."
+    "sdkbox::Firebase::": "sdkbox.firebase."
 
   to_native:
     # lua to native
