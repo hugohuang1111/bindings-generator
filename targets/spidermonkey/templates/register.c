@@ -13,28 +13,6 @@ extern JSObject *jsb_${current_class.parents[0].underlined_class_name}_prototype
 
 void js_${generator.prefix}_${current_class.class_name}_finalize(JSFreeOp *fop, JSObject *obj) {
     CCLOGINFO("jsbindings: finalizing JS object %p (${current_class.class_name})", obj);
-#if $generator.script_control_cpp
-    js_proxy_t* nproxy;
-    js_proxy_t* jsproxy;
-
-\#if (SDKBOX_COCOS_JSB_VERSION >= 2)
-    JSContext *cx = ScriptingCore::getInstance()->getGlobalContext();
-    JS::RootedObject jsobj(cx, obj);
-    jsproxy = jsb_get_js_proxy(jsobj);
-\#else
-    jsproxy = jsb_get_js_proxy(obj);
-\#endif
-
-    if (jsproxy) {
-        nproxy = jsb_get_native_proxy(jsproxy->ptr);
-
-        ${current_class.namespaced_class_name} *nobj = static_cast<${current_class.namespaced_class_name} *>(nproxy->ptr);
-        if (nobj)
-            delete nobj;
-
-        jsb_remove_proxy(nproxy, jsproxy);
-    }
-#end if
 }
 
 #if $generator.in_listed_extend_classed($current_class.class_name) and not $current_class.is_abstract
@@ -60,8 +38,14 @@ static bool js_${current_class.underlined_class_name}_ctor(JSContext *cx, uint32
 \#if defined(MOZJS_MAJOR_VERSION)
 \#if MOZJS_MAJOR_VERSION >= 33
 void js_register_${generator.prefix}_${current_class.class_name}(JSContext *cx, JS::HandleObject global) {
-    jsb_${current_class.underlined_class_name}_class = (JSClass *)calloc(1, sizeof(JSClass));
-    jsb_${current_class.underlined_class_name}_class->name = "${current_class.target_class_name}";
+    static JSClass PluginAgeCheq_class = {
+        "${current_class.target_class_name}",
+        JSCLASS_HAS_PRIVATE,
+        nullptr
+    };
+    jsb_sdkbox_PluginAgeCheq_class = &PluginAgeCheq_class;
+
+\#if MOZJS_MAJOR_VERSION < 52
     jsb_${current_class.underlined_class_name}_class->addProperty = JS_PropertyStub;
     jsb_${current_class.underlined_class_name}_class->delProperty = JS_DeletePropertyStub;
     jsb_${current_class.underlined_class_name}_class->getProperty = JS_PropertyStub;
@@ -71,9 +55,9 @@ void js_register_${generator.prefix}_${current_class.class_name}(JSContext *cx, 
     jsb_${current_class.underlined_class_name}_class->convert = JS_ConvertStub;
     jsb_${current_class.underlined_class_name}_class->finalize = js_${generator.prefix}_${current_class.class_name}_finalize;
     jsb_${current_class.underlined_class_name}_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
+\#endif
 
     static JSPropertySpec properties[] = {
-        JS_PSG("__nativeObj", js_is_native_obj, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_PS_END
     };
 
@@ -102,14 +86,12 @@ void js_register_${generator.prefix}_${current_class.class_name}(JSContext *cx, 
 
 #if len($current_class.parents) > 0
     JS::RootedObject parent_proto(cx, jsb_${current_class.parents[0].underlined_class_name}_prototype);
-#end if
-    jsb_${current_class.underlined_class_name}_prototype = JS_InitClass(
-        cx, global,
-#if len($current_class.parents) > 0
-        parent_proto,
 #else
-        JS::NullPtr(), // parent proto
+    JS::RootedObject parent_proto(cx, nullptr);
 #end if
+    JSObject* objProto = JS_InitClass(
+        cx, global,
+        parent_proto,
         jsb_${current_class.underlined_class_name}_class,
 #if has_constructor
         js_${generator.prefix}_${current_class.class_name}_constructor, 0, // constructor
@@ -122,39 +104,35 @@ void js_register_${generator.prefix}_${current_class.class_name}(JSContext *cx, 
         funcs,
         NULL, // no static properties
         st_funcs);
-    // make the class enumerable in the registered namespace
-//  bool found;
-//FIXME: Removed in Firefox v27
-//  JS_SetPropertyAttributes(cx, global, "${current_class.target_class_name}", JSPROP_ENUMERATE | JSPROP_READONLY, &found);
+
+    JS::RootedObject proto(cx, objProto);
+    TypeTest<${current_class.namespaced_class_name}> t;
+    js_type_class_t *typeClass;
+    std::string typeName = t.s_name();
+    if (_js_global_type_map.find(typeName) == _js_global_type_map.end()) {
+        typeClass = (js_type_class_t *)malloc(sizeof(js_type_class_t));
+        typeClass->jsclass = jsb_${current_class.underlined_class_name}_class;
+\#if MOZJS_MAJOR_VERSION >= 52
+        typeClass->proto = new JS::PersistentRootedObject(cx, proto);;
+\#else
+        typeClass->proto = objProto;
+#if len($current_class.parents) > 0
+        typeClass->parentProto = jsb_${current_class.parents[0].underlined_class_name}_prototype;
+#else
+        typeClass->parentProto = NULL;
+#end if
+\#endif
+
+        _js_global_type_map.insert(std::make_pair(typeName, typeClass));
+    }
 
     // add the proto and JSClass to the type->js info hash table
-\#if (SDKBOX_COCOS_JSB_VERSION >= 2)
-    JS::RootedObject proto(cx, jsb_${current_class.underlined_class_name}_prototype);
-#if len($current_class.parents) > 0
-    jsb_register_class<${current_class.namespaced_class_name}>(cx, jsb_${current_class.underlined_class_name}_class, proto, parent_proto);
-#else
-    jsb_register_class<${current_class.namespaced_class_name}>(cx, jsb_${current_class.underlined_class_name}_class, proto, JS::NullPtr());
-#end if
-#if $generator.in_listed_extend_classed($current_class.class_name) and not $current_class.is_abstract
-    anonEvaluate(cx, global, "(function () { ${generator.target_ns}.${current_class.target_class_name}.extend = cc.Class.extend; })()");
-#end if
-\#else
-    TypeTest<${current_class.namespaced_class_name}> t;
-    js_type_class_t *p;
-    std::string typeName = t.s_name();
-    if (_js_global_type_map.find(typeName) == _js_global_type_map.end())
-    {
-        p = (js_type_class_t *)malloc(sizeof(js_type_class_t));
-        p->jsclass = jsb_${current_class.underlined_class_name}_class;
-        p->proto = jsb_${current_class.underlined_class_name}_prototype;
-#if len($current_class.parents) > 0
-        p->parentProto = jsb_${current_class.parents[0].underlined_class_name}_prototype;
-#else
-        p->parentProto = NULL;
-#end if
-        _js_global_type_map.insert(std::make_pair(typeName, p));
-    }
-\#endif
+    JS::RootedValue className(cx);
+    JSString* jsstr = JS_NewStringCopyZ(cx, "${current_class.target_class_name}");
+    className = JS::StringValue(jsstr);
+    JS_SetProperty(cx, proto, "_className", className);
+    JS_SetProperty(cx, proto, "__nativeObj", JS::TrueHandleValue);
+    JS_SetProperty(cx, proto, "__is_ref", JS::FalseHandleValue);
 }
 \#else
 void js_register_${generator.prefix}_${current_class.class_name}(JSContext *cx, JSObject *global) {
