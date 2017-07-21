@@ -1,10 +1,10 @@
 ## ===== static function implementation template - for overloaded functions
-bool ${signature_name}(JSContext *cx, uint32_t argc, jsval *vp)
+bool ${signature_name}(JSContext *cx, uint32_t argc, JS::Value *vp)
 {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
     bool ok = true;
     #for func in $implementations
-    
+
     #if len($func.arguments) >= $func.min_args
     #set arg_count = len($func.arguments)
     #set arg_idx = $func.min_args
@@ -53,6 +53,6 @@ bool ${signature_name}(JSContext *cx, uint32_t argc, jsval *vp)
     #end while
     #end if
     #end for
-    JS_ReportError(cx, "${signature_name} : wrong number of arguments");
+    JS_ReportErrorUTF8(cx, "${signature_name} : wrong number of arguments");
     return false;
 }
