@@ -43,7 +43,7 @@ void js_register_${generator.prefix}_${current_class.class_name}(JSContext *cx, 
         JSCLASS_HAS_PRIVATE,
         nullptr
     };
-    jsb_sdkbox_PluginAgeCheq_class = &PluginAgeCheq_class;
+    jsb_${current_class.underlined_class_name}_class = &PluginAgeCheq_class;
 
 \#if MOZJS_MAJOR_VERSION < 52
     jsb_${current_class.underlined_class_name}_class->addProperty = JS_PropertyStub;
