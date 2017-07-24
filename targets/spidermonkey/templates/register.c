@@ -115,11 +115,11 @@ void js_register_${generator.prefix}_${current_class.class_name}(JSContext *cx, 
 \#if MOZJS_MAJOR_VERSION >= 52
         typeClass->proto = new JS::PersistentRootedObject(cx, proto);;
 \#else
-        typeClass->proto = objProto;
+        typeClass->proto.construct(cx, objProto);
 #if len($current_class.parents) > 0
-        typeClass->parentProto = jsb_${current_class.parents[0].underlined_class_name}_prototype;
+        typeClass->parentProto.construct(cx, jsb_${current_class.parents[0].underlined_class_name}_prototype);
 #else
-        typeClass->parentProto = NULL;
+        typeClass->parentProto.construct(cx);
 #end if
 \#endif
 
