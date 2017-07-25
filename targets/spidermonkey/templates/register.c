@@ -105,26 +105,26 @@ void js_register_${generator.prefix}_${current_class.class_name}(JSContext *cx, 
         NULL, // no static properties
         st_funcs);
 
+\#if (SDKBOX_COCOS_JSB_VERSION >= 2)
     JS::RootedObject proto(cx, objProto);
-    TypeTest<${current_class.namespaced_class_name}> t;
-    js_type_class_t *typeClass;
-    std::string typeName = t.s_name();
-    if (_js_global_type_map.find(typeName) == _js_global_type_map.end()) {
-        typeClass = (js_type_class_t *)malloc(sizeof(js_type_class_t));
-        typeClass->jsclass = jsb_${current_class.underlined_class_name}_class;
 \#if MOZJS_MAJOR_VERSION >= 52
-        typeClass->proto = new JS::PersistentRootedObject(cx, proto);;
+    jsb_register_class<${current_class.namespaced_class_name}>(cx, jsb_${current_class.underlined_class_name}_class, proto);
 \#else
-        typeClass->proto.construct(cx, objProto);
-#if len($current_class.parents) > 0
-        typeClass->parentProto.construct(cx, jsb_${current_class.parents[0].underlined_class_name}_prototype);
-#else
-        typeClass->parentProto.construct(cx);
-#end if
+    jsb_register_class<${current_class.namespaced_class_name}>(cx, jsb_${current_class.underlined_class_name}_class, proto, JS::NullPtr());
 \#endif
-
-        _js_global_type_map.insert(std::make_pair(typeName, typeClass));
+\#else
+    TypeTest<${current_class.namespaced_class_name}> t;
+    js_type_class_t *p;
+    std::string typeName = t.s_name();
+    if (_js_global_type_map.find(typeName) == _js_global_type_map.end())
+    {
+        p = (js_type_class_t *)malloc(sizeof(js_type_class_t));
+        p->jsclass = jsb_${current_class.underlined_class_name}_class;
+        p->proto = objProto;
+        p->parentProto = NULL;
+        _js_global_type_map.insert(std::make_pair(typeName, p));
     }
+\#endif
 
     // add the proto and JSClass to the type->js info hash table
     JS::RootedValue className(cx);
