@@ -105,8 +105,8 @@ void js_register_${generator.prefix}_${current_class.class_name}(JSContext *cx, 
         NULL, // no static properties
         st_funcs);
 
-\#if (SDKBOX_COCOS_JSB_VERSION >= 2)
     JS::RootedObject proto(cx, objProto);
+\#if (SDKBOX_COCOS_JSB_VERSION >= 2)
 \#if MOZJS_MAJOR_VERSION >= 52
     jsb_register_class<${current_class.namespaced_class_name}>(cx, jsb_${current_class.underlined_class_name}_class, proto);
 \#else
