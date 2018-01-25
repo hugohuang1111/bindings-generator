@@ -38,14 +38,9 @@ static bool js_${current_class.underlined_class_name}_ctor(JSContext *cx, uint32
 \#if defined(MOZJS_MAJOR_VERSION)
 \#if MOZJS_MAJOR_VERSION >= 33
 void js_register_${generator.prefix}_${current_class.class_name}(JSContext *cx, JS::HandleObject global) {
-    static JSClass PluginAgeCheq_class = {
-        "${current_class.target_class_name}",
-        JSCLASS_HAS_PRIVATE,
-        nullptr
-    };
-    jsb_${current_class.underlined_class_name}_class = &PluginAgeCheq_class;
-
 \#if MOZJS_MAJOR_VERSION < 52
+    jsb_${current_class.underlined_class_name}_class = (JSClass *)calloc(1, sizeof(JSClass));
+    jsb_${current_class.underlined_class_name}_class->name = "${current_class.target_class_name}";
     jsb_${current_class.underlined_class_name}_class->addProperty = JS_PropertyStub;
     jsb_${current_class.underlined_class_name}_class->delProperty = JS_DeletePropertyStub;
     jsb_${current_class.underlined_class_name}_class->getProperty = JS_PropertyStub;
@@ -55,6 +50,13 @@ void js_register_${generator.prefix}_${current_class.class_name}(JSContext *cx, 
     jsb_${current_class.underlined_class_name}_class->convert = JS_ConvertStub;
     jsb_${current_class.underlined_class_name}_class->finalize = js_${generator.prefix}_${current_class.class_name}_finalize;
     jsb_${current_class.underlined_class_name}_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
+\#else
+    static JSClass PluginAgeCheq_class = {
+        "${current_class.target_class_name}",
+        JSCLASS_HAS_PRIVATE,
+        nullptr
+    };
+    jsb_${current_class.underlined_class_name}_class = &PluginAgeCheq_class;
 \#endif
 
     static JSPropertySpec properties[] = {
