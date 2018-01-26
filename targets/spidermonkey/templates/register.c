@@ -51,12 +51,12 @@ void js_register_${generator.prefix}_${current_class.class_name}(JSContext *cx, 
     jsb_${current_class.underlined_class_name}_class->finalize = js_${generator.prefix}_${current_class.class_name}_finalize;
     jsb_${current_class.underlined_class_name}_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
 \#else
-    static JSClass PluginAgeCheq_class = {
+    static JSClass ${current_class.target_class_name}_class = {
         "${current_class.target_class_name}",
         JSCLASS_HAS_PRIVATE,
         nullptr
     };
-    jsb_${current_class.underlined_class_name}_class = &PluginAgeCheq_class;
+    jsb_${current_class.underlined_class_name}_class = &${current_class.target_class_name}_class;
 \#endif
 
     static JSPropertySpec properties[] = {
